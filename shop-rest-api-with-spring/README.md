@@ -12,6 +12,8 @@ Uniform interface | Resource manipulation through representations |  |
 Uniform interface | Self-descriptive messages |  | 
 Uniform interface |  HATEOAS|  | 
 
+---
+
 ## 개발환경
 ---
 - STS
