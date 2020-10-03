@@ -1,4 +1,4 @@
-package me.chulgil.shop.domain;
+package me.chulgil.shop.user;
 
 import java.util.Date;
 

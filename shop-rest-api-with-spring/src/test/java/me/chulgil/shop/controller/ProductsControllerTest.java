@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
@@ -23,12 +23,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import me.chulgil.shop.domain.Products;
-import me.chulgil.shop.repository.ProductsRepository;
+import me.chulgil.shop.product.Product;
+import me.chulgil.shop.product.ProductRepository;
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductsControllerTest {
 	
 	@Autowired
@@ -37,16 +38,14 @@ public class ProductsControllerTest {
 	@Autowired
 	ObjectMapper objectMapper;
 	
-	@MockBean
-	ProductsRepository productsRepository;
+	@MockBean ProductRepository prodRepository;
 	
 	@Test
-	public void createProduct() throws Exception {
+	public void newProducts() throws Exception {
 		
-		Products prod = Products.builder()
-				.seq("P001")
+		Product prod = Product.builder()
 				.id("PROD001")
-				.categoryId("CATE001")
+				.categorySeq("CATE001")
 				.name("Spring Product")
 				.description("Product description")
 				.price(1000)
@@ -54,10 +53,8 @@ public class ProductsControllerTest {
 				.createdBy("chulgil")
 				.build();
 		
-		Mockito.when(productsRepository.save(prod)).thenReturn(prod);
 		
-		
-		mockMvc.perform(post("/api/products/")
+		mockMvc.perform(post("/api/product/")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaTypes.HAL_JSON)
 				.content(objectMapper.writeValueAsString(prod))
