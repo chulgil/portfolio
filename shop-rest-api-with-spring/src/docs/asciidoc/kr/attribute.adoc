@@ -6,19 +6,19 @@
 :appendix-caption: 부록
 :caution-caption: 주의
 :example-caption: 예
-:figure-caption: 図
-:important-caption: 重要
-:last-update-label: 最終更新
-:listing-caption: リスト
-:manname-title: 名前
-:note-caption: 注記
-:preface-title: まえがき
-:table-caption: 表
-:tip-caption: ヒント
-:toc-title: 目次
-:untitled-label: 無題
-:version-label: バージョン
-:warning-caption: 警告
+:figure-caption: 그림
+:important-caption: 중요
+:last-update-label: 마지막 업데이트
+:listing-caption: 리스트
+:manname-title: 이름
+:note-caption: 주의
+:preface-title: 서문
+:table-caption: 표
+:tip-caption: 팁
+:toc-title: 목차
+:untitled-label: 무제
+:version-label: 버젼
+:warning-caption: 경고
 
 :experimental:
 :icons: font

@@ -1,5 +1,8 @@
 package me.chulgil.shop.controller;
 
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -11,9 +14,11 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,12 +27,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import me.chulgil.shop.core.RestDocsConfiguration;
 import me.chulgil.shop.product.Product;
 import me.chulgil.shop.product.ProductRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 public class ProductsControllerTest {
 	
 	@Autowired
@@ -63,9 +71,11 @@ public class ProductsControllerTest {
 			.andExpect(header().exists(HttpHeaders.LOCATION))
 			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
 			.andExpect(jsonPath("_links.self").exists())
-//			.andDo(document("create-product"), links(
-//					linkWithRel("self").description("Link to the alpha resource") 
-//					))
+			.andDo(document("submit-product", 
+					links(
+							linkWithRel("self").description("link to self"),
+							linkWithRel("profile").description("link to update an exsiting event")
+					)))
 		;
 	}
 

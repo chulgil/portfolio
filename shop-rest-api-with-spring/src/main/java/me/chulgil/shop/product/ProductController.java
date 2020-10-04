@@ -55,6 +55,7 @@ public class ProductController {
 		
 		var model = new ProductModel(product);
 		model.add(links.linkToItemResource(product).withSelfRel());
+		model.add(Link.of("/docs/kr/index.html#resources-product-create").withRel("profile"));
 		
 		
 		var paymentUri = link.toUri();

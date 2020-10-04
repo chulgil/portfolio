@@ -123,6 +123,10 @@ asciidoctorj {
     requires = [
         'asciidoctor-diagram'
     ]
+    asciidoctorj {
+        attributes 'stylesdir': '@style',
+            'stylesheet': 'asciidoctor.css'
+    }
     attributes 'source-highlighter': 'coderay'
 
 }
