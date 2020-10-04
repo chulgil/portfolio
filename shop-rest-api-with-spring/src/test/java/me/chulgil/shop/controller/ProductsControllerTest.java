@@ -1,6 +1,5 @@
 package me.chulgil.shop.controller;
 
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -25,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import me.chulgil.shop.product.Product;
 import me.chulgil.shop.product.ProductRepository;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -63,7 +61,12 @@ public class ProductsControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("id").exists())
 			.andExpect(header().exists(HttpHeaders.LOCATION))
-			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE));
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+			.andExpect(jsonPath("_links.self").exists())
+//			.andDo(document("create-product"), links(
+//					linkWithRel("self").description("Link to the alpha resource") 
+//					))
+		;
 	}
 
 }

@@ -1,8 +1,11 @@
 plugins {
 	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'org.asciidoctor.convert' version '1.5.8'
+	// https://github.com/h1romas4/asciidoctor-gradle-template/blob/master/build.gradle
+	id "org.asciidoctor.jvm.convert" version "3.1.0"
+	id 'org.asciidoctor.jvm.pdf' version '3.2.0'
 	id 'java'
+	id 'eclipse'
 }
 
 group = 'me.chulgi'
@@ -10,17 +13,24 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
+	compileOnly {	
 		extendsFrom annotationProcessor
 	}
 }
 
+
 repositories {
-	mavenCentral()
+    mavenLocal()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/libs-snapshot' }
+    mavenCentral()
 }
 
+/* for rest docs */
 ext {
+    //테스트를 통해 생성될 조각(문서화에 필요한)들이 저장될 위치
 	set('snippetsDir', file("build/generated-snippets"))
+	set('springRestdocsVersion', '2.0.4.RELEASE')
 }
 
 dependencies {
@@ -29,8 +39,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.4.RELEASE'
-	compile group: 'org.modelmapper.extensions', name: 'modelmapper-spring', version: '2.3.5'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.4.RELEASE'
+	implementation group: 'org.modelmapper.extensions', name: 'modelmapper-spring', version: '2.3.5'
 	
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -51,7 +61,90 @@ test {
 }
 
 
+// HTML 변환용 정
+// https://asciidoctor.github.io/asciidoctor-gradle-plugin/development-3.x/user-guide/
+// https://github.com/asciidoctor/asciidoctor-gradle-examples/tree/master/asciidoc-to-html-example
 asciidoctor {
-	inputs.dir snippetsDir
-	dependsOn test
+	
+     //문서가 작성되기전 test가 먼저 실행되도록 합니다.
+    dependsOn test
+    languages 'en', 'kr', 'jp'
+    baseDir file('src/docs/asciidoc')
+    // 화면리소스정의（build/ 에의해 복사됨）
+    resources 'en' , {
+        from("${sourceDir}/en") {
+            include '**/images/*'
+        }
+    }
+    resources 'kr' , {
+        from("${sourceDir}/kr") {
+            include '**/images/*'
+        }
+    }
+    resources 'jp' , {
+        from("${sourceDir}/jp") {
+            include '**/images/*'
+        }
+    }
+    // CSS정의（.html 의 선두에 추가됨）
+    asciidoctorj {
+        attributes 'stylesdir': '@style',
+            'stylesheet': 'asciidoctor.css'
+    }
+    sources {
+        include '**/index.adoc'
+    }
+    baseDirFollowsSourceDir()
+    
 }
+
+asciidoctorPdf {
+    baseDir file('src/docs/asciidoc')
+    fontsDir file('src/docs/asciidoc/@font')
+    sources {
+        include 'index.adoc'
+    }
+    asciidoctorj {
+        attributes 'pdf-stylesdir': "@style",
+            'pdf-style': 'pdf'
+    }
+   forkOptions {
+     jvmArgs '-Xdiag'
+     minHeapSize =  '256M'
+   }
+}
+
+asciidoctorj {
+    modules {
+        diagram.use()
+        diagram.version '2.0.2'
+        pdf.version '1.5.3'
+    }
+    requires = [
+        'asciidoctor-diagram'
+    ]
+    attributes 'source-highlighter': 'coderay'
+
+}
+
+task docs(dependsOn: [asciidoctor, asciidoctorPdf]) doLast { 
+	
+	println "--- finished copy---"
+    copy {
+        from 'build/docs/asciidoc/'
+        into 'src/main/resources/static/docs'
+    }
+    println "--- finished cache---"
+	delete fileTree('build/docs/asciidoc') {
+		include '**/*'
+	}
+}
+
+
+build {
+	dependsOn docs
+}
+
+
+
+

@@ -1,0 +1,30 @@
+:lang: en
+:encoding: utf-8
+:doctype: book
+:toc-title: title
+:preface-title: sub title
+:appendix-caption: appendix
+:caution-caption: caution
+:example-caption: example
+:figure-caption: picture
+:important-caption: important
+:last-update-label: last update
+:listing-caption: list
+:manname-title: name
+:note-caption: note
+:preface-title: preface
+:table-caption: table
+:tip-caption: tip
+:toc-title: toc
+:untitled-label: untitled
+:version-label: version
+:warning-caption: warning
+
+:experimental:
+:icons: font
+:sectnums:
+:chapter-label:
+:table-stripes: even
+
+ifndef::imagesdir[:imagesdir: ./images]
+ifndef::sourcedir[:sourcedir: ./src]

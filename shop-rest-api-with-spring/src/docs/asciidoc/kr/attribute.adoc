@@ -1,0 +1,30 @@
+:lang: kr
+:encoding: utf-8
+:doctype: book
+:toc-title: 목차
+:preface-title: 처음으로
+:appendix-caption: 부록
+:caution-caption: 주의
+:example-caption: 예
+:figure-caption: 図
+:important-caption: 重要
+:last-update-label: 最終更新
+:listing-caption: リスト
+:manname-title: 名前
+:note-caption: 注記
+:preface-title: まえがき
+:table-caption: 表
+:tip-caption: ヒント
+:toc-title: 目次
+:untitled-label: 無題
+:version-label: バージョン
+:warning-caption: 警告
+
+:experimental:
+:icons: font
+:sectnums:
+:chapter-label:
+:table-stripes: even
+
+ifndef::imagesdir[:imagesdir: ./images]
+ifndef::sourcedir[:sourcedir: ./src]
